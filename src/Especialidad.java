@@ -1,2 +1,6 @@
-package PACKAGE_NAME;public class Especialidad {
+public enum Especialidad {
+
+
+    ALERGOLOGIA,DERMATOLOGIA,GINECOLOGIA,OFTALMOLOGIA,CARDIOLOGIA,PEDIATRIA
 }
+
