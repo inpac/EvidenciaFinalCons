@@ -78,7 +78,7 @@ public class Main {
 
 
     public static void createMedico() throws IOException {
-
+/*Aqui se crean los medicos*/
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Introduce el id del Doctor: ");
         String id = reader.readLine();
