@@ -109,7 +109,7 @@ public class Main {
     }
 
     public static void createCita() throws IOException {
-
+/*se hace branch de crear cita*/
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Introduce el id de la Cita: ");
         String id = reader.readLine();
