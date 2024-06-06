@@ -67,7 +67,7 @@ public class Main {
     }
 
     public static void showMenu() {
-
+/*Se utiliza para mostrar el menu del programa*/
         System.out.println("1. Agregar Medico");
         System.out.println("2. Agregar Paciente");
         System.out.println("3. Hacer Cita");
