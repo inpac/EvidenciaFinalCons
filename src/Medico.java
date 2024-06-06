@@ -8,19 +8,31 @@ public class Medico {
         setId(id);
         setName(name);
         setSpecialty(specialty);
+
     }
 
-    private void setSpecialty(String specialty) {
-        return;
+    public void setSpecialty(String specialty){
+        this.specialty = specialty;
     }
 
-    private void setName(String name) {
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
         return name;
     }
 
-    private void setId(String id) {
-        this.id = id;
-
+    public String getSpecialty() {
+        return specialty;
     }
 
 
