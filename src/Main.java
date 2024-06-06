@@ -2,7 +2,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
-import java.io.Reader;
+import java.io.*;
 
 
 
@@ -13,6 +13,7 @@ public class Main {
     static HashMap<String, Medico> medicos = new HashMap<String, Medico>();
     static HashMap<String, Paciente> pacientes = new HashMap<String, Paciente>();
     static HashMap<String, Cita> citas = new HashMap<String, Cita>();
+
 
 
     public static void main(String[] args) throws IOException {
@@ -89,6 +90,7 @@ public class Main {
 
         Medico medico = new Medico(id, name, specialty);
         medicos.put(id,medico);
+        saveMedico(medico);
         System.out.println("El Doctor se ha agregado al sistema!");
 
 
@@ -105,6 +107,7 @@ public class Main {
 
         Paciente paciente = new Paciente(id, name);
         pacientes.put(id,paciente);
+        savePaciente(paciente);
         System.out.println("El Paciente se ha agregado al sistema!");
     }
 
@@ -132,6 +135,7 @@ public class Main {
         String motivo = reader.readLine();
         Cita cita = new Cita(id, fechahora, motivo, medicos.get(medicoId), pacientes.get(pacienteid));
         citas.put(id,cita);
+        saveCita(cita);
         System.out.println(" La cita ha sido agendada! ");
     }
 
@@ -157,5 +161,24 @@ public class Main {
 
     }
 
+    public static void saveMedico(Medico medico) throws IOException{
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("medicos.txt",true))){
+            writer.write(medico.getId() + "," + medico.getName() + ","+medico.getSpecialty());
+            writer.newLine();
+        }
+    }
+
+    public static void savePaciente(Paciente paciente) throws IOException{
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("pacientes.txt",true))){
+            writer.write(paciente.getId() + "," + paciente.getName());
+            writer.newLine();
+        }
+    }
+    public static void saveCita(Cita cita) throws IOException{
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("citas.txt",true))){
+            writer.write(cita.getId() + "," + cita.getFechahora()+","+cita.getMotivo()+","+cita.getMedico().getId()+","+cita.getPaciente().getId());
+            writer.newLine();
+        }
+    }
 
     }
