@@ -1,0 +1,119 @@
+Index: src/Main.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import java.io.BufferedReader;\r\nimport java.io.IOException;\r\nimport java.io.InputStreamReader;\r\nimport java.util.HashMap;\r\nimport java.io.*;\r\n\r\n\r\n\r\npublic class Main {\r\n    static String user = \"admin\";\r\n    static String passw = \"votoporvoto\";\r\n    static int option;\r\n    static HashMap<String, Medico> medicos = new HashMap<String, Medico>();\r\n    static HashMap<String, Paciente> pacientes = new HashMap<String, Paciente>();\r\n    static HashMap<String, Cita> citas = new HashMap<String, Cita>();\r\n\r\n\r\n\r\n    public static void main(String[] args) throws IOException {\r\n\r\n        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));\r\n\r\n        while (true){\r\n            System.out.println(\"Escribir nombre de usuario: \");\r\n            String username = reader.readLine();\r\n\r\n            System.out.println(\"Introduce tu contrasena0: \");\r\n            String password = reader.readLine();\r\n\r\n            if (authenticate(username,password)){\r\n                System.out.println(\"Bienvenido a Epic 3000\");\r\n                while (true){\r\n                    showMenu();\r\n                    option = Integer.parseInt(reader.readLine());\r\n\r\n                    switch (option){\r\n                        case 1:\r\n                            createMedico();\r\n                            break;\r\n                        case 2:\r\n                            createPaciente();\r\n                            break;\r\n                        case 3:\r\n                            createCita();\r\n                            break;\r\n                        case 4:\r\n                            showCitas();\r\n                            break;\r\n                        case 5:\r\n                            System.out.println(\"Saliendo del programa espere...\");\r\n                            return;\r\n                        default:\r\n                            System.out.println(\"Opcion no se reconoce\");\r\n\r\n                    }\r\n                }\r\n            } else{\r\n                System.out.println(\"Usuario o Contasena Incorrecta\");\r\n            }\r\n\r\n        }\r\n\r\n    }\r\n\r\n    public static boolean authenticate(String userin, String passwin){\r\n/*Se utiliza esta parte para revisar la contrasena*/\r\n        return user.equals(userin) && passw.equals(passwin);\r\n    }\r\n\r\n    public static void showMenu() {\r\n/*Se utiliza para mostrar el menu del programa*/\r\n        System.out.println(\"1. Agregar Medico\");\r\n        System.out.println(\"2. Agregar Paciente\");\r\n        System.out.println(\"3. Hacer Cita\");\r\n        System.out.println(\"4. Mostrar Citas\");\r\n        System.out.println(\"5. Salir\");\r\n\r\n    }\r\n\r\n\r\n    public static void createMedico() throws IOException {\r\n/*Aqui se crean los medicos*/\r\n        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));\r\n        System.out.println(\"Introduce el id del Doctor: \");\r\n        String id = reader.readLine();\r\n        System.out.println(\"Introduce el nombre del Doctor: \");\r\n        String name = reader.readLine();\r\n        System.out.println(\"Introduce la especialidad del Doctor: \");\r\n        String specialty = reader.readLine();\r\n\r\n        Medico medico = new Medico(id, name, specialty);\r\n        medicos.put(id,medico);\r\n        saveMedico(medico);\r\n        System.out.println(\"El Doctor se ha agregado al sistema!\");\r\n\r\n\r\n    }\r\n\r\n    public static void createPaciente() throws IOException {\r\n/*se hace branch para crear pacientes*/\r\n        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));\r\n        System.out.println(\"Introduce el id del Paciente: \");\r\n        String id = reader.readLine();\r\n        System.out.println(\"Introduce el nombre del Paciente: \");\r\n        String name = reader.readLine();\r\n\r\n\r\n        Paciente paciente = new Paciente(id, name);\r\n        pacientes.put(id,paciente);\r\n        savePaciente(paciente);\r\n        System.out.println(\"El Paciente se ha agregado al sistema!\");\r\n    }\r\n\r\n    public static void createCita() throws IOException {\r\n/*se hace branch de crear cita*/\r\n        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));\r\n        System.out.println(\"Introduce el id de la Cita: \");\r\n        String id = reader.readLine();\r\n        System.out.println(\"Introduce el id del Paciente: \");\r\n        String pacienteid = reader.readLine();\r\n\r\n        if (!pacientes.containsKey(pacienteid)){\r\n            System.out.println(\"No se encontro el paciente en el sistema!\");\r\n            return;\r\n        }\r\n        System.out.println(\"Introduce el id del Doctor: \");\r\n        String medicoId = reader.readLine();\r\n            if(!medicos.containsKey(medicoId)){\r\n                System.out.println(\"No se encontro el Doctor en el sistema!\");\r\n                return;\r\n            }\r\n        System.out.println(\"Introduce la fecha y hora de la cita: (MM/DD/YYYY HH:MM\");\r\n        String fechahora = reader.readLine();\r\n        System.out.println(\"Introduce la razon de la cita: \");\r\n        String motivo = reader.readLine();\r\n        Cita cita = new Cita(id, fechahora, motivo, medicos.get(medicoId), pacientes.get(pacienteid));\r\n        citas.put(id,cita);\r\n        saveCita(cita);\r\n        System.out.println(\" La cita ha sido agendada! \");\r\n    }\r\n\r\n    public static void showCitas() throws IOException {\r\n        /*se hace branch para mostrar citas*/\r\n        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));\r\n\r\n        System.out.println(\"Introduce el Folio de tu cita: \");\r\n        String citaId = reader.readLine();\r\n\r\n        if(citas.containsKey(citaId)){\r\n            Cita cita = citas.get(citaId);\r\n            System.out.println(\"Folio de cita: \"+ cita.getId());\r\n            System.out.println(\"Fecha de cita: \"+ cita.getFechahora());\r\n            System.out.println(\"El doctor es: \"+ cita.getMedico().getName());\r\n            System.out.println(\"El paciente es: \"+ cita.getPaciente().getName());\r\n            System.out.println(\"El motivo de la visita es: \"+ cita.getMotivo());\r\n\r\n\r\n        } else {\r\n            System.out.println(\"No se encontro la cita con ese Folio!\");\r\n        }\r\n\r\n    }\r\n\r\n    public static void saveMedico(Medico medico) throws IOException{\r\n        try (BufferedWriter writer = new BufferedWriter(new FileWriter(\"medicos.txt\",true))){\r\n            writer.write(medico.getId() + \",\" + medico.getName() + \",\"+medico.getSpecialty());\r\n            writer.newLine();\r\n        }\r\n    }\r\n\r\n    public static void savePaciente(Paciente paciente) throws IOException{\r\n        try (BufferedWriter writer = new BufferedWriter(new FileWriter(\"pacientes.txt\",true))){\r\n            writer.write(paciente.getId() + \",\" + paciente.getName());\r\n            writer.newLine();\r\n        }\r\n    }\r\n    public static void saveCita(Cita cita) throws IOException{\r\n        try (BufferedWriter writer = new BufferedWriter(new FileWriter(\"citas.txt\",true))){\r\n            writer.write(cita.getId() + \",\" + cita.getFechahora()+\",\"+cita.getMotivo()+\",\"+cita.getMedico().getId()+\",\"+cita.getPaciente().getId());\r\n            writer.newLine();\r\n        }\r\n    }\r\n\r\n    }
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Main.java b/src/Main.java
+--- a/src/Main.java	
++++ b/src/Main.java	
+@@ -165,6 +165,8 @@
+         try (BufferedWriter writer = new BufferedWriter(new FileWriter("medicos.txt",true))){
+             writer.write(medico.getId() + "," + medico.getName() + ","+medico.getSpecialty());
+             writer.newLine();
++        } catch (IOException e){
++            System.out.println("No se pudo guardar!");
+         }
+     }
+ 
+@@ -172,12 +174,16 @@
+         try (BufferedWriter writer = new BufferedWriter(new FileWriter("pacientes.txt",true))){
+             writer.write(paciente.getId() + "," + paciente.getName());
+             writer.newLine();
++        } catch (IOException e){
++            System.out.println("No se pudo guardar!");
+         }
+     }
+     public static void saveCita(Cita cita) throws IOException{
+         try (BufferedWriter writer = new BufferedWriter(new FileWriter("citas.txt",true))){
+             writer.write(cita.getId() + "," + cita.getFechahora()+","+cita.getMotivo()+","+cita.getMedico().getId()+","+cita.getPaciente().getId());
+             writer.newLine();
++        } catch (IOException e){
++            System.out.println("No se pudo guardar!");
+         }
+     }
+ 
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"9735d866-417d-4b74-8bf2-d272cc1a74dc\" name=\"Changes\" comment=\"se hace el esqueleto del programa\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/src/Main.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/Main.java\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Merge.Settings\">\r\n    <option name=\"BRANCH\" value=\"develop\" />\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\r\n      <map>\r\n        <entry key=\"$PROJECT_DIR$\" value=\"master\" />\r\n      </map>\r\n    </option>\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPEN&quot;,\r\n    &quot;assignee&quot;: &quot;inpac&quot;\r\n  }\r\n}</component>\r\n  <component name=\"GithubPullRequestsUISettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;url&quot;: &quot;https://github.com/inpac/EvidenciaFinalCons.git&quot;,\r\n    &quot;accountId&quot;: &quot;38ee366f-ddad-41d1-94a4-7b947ffb4323&quot;\r\n  }\r\n}</component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 3\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"2hRwjY5FYrR6A5qkcoLg4dJDmmh\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"Application.Main.executor\": \"Run\",\r\n    \"Downloaded.Files.Path.Enabled\": \"false\",\r\n    \"Repository.Attach.Annotations\": \"false\",\r\n    \"Repository.Attach.JavaDocs\": \"false\",\r\n    \"Repository.Attach.Sources\": \"false\",\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"git-widget-placeholder\": \"develop\",\r\n    \"kotlin-language-version-configured\": \"true\",\r\n    \"onboarding.tips.debug.path\": \"C:/Users/IAN/IdeaProjects/EvidenciaFinalCons/src/Main.java\"\r\n  }\r\n}]]></component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"9735d866-417d-4b74-8bf2-d272cc1a74dc\" name=\"Changes\" comment=\"\" />\r\n      <created>1717570337236</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1717570337236</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"se hace el esqueleto del programa\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1717576302009</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1717576302009</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"2\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State>\r\n              <option name=\"FILTERS\">\r\n                <map>\r\n                  <entry key=\"branch\">\r\n                    <value>\r\n                      <list>\r\n                        <option value=\"master\" />\r\n                      </list>\r\n                    </value>\r\n                  </entry>\r\n                </map>\r\n              </option>\r\n            </State>\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"se hace el esqueleto del programa\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"se hace el esqueleto del programa\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	
++++ b/.idea/workspace.xml	
+@@ -4,8 +4,12 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="9735d866-417d-4b74-8bf2-d272cc1a74dc" name="Changes" comment="se hace el esqueleto del programa">
++    <list default="true" id="9735d866-417d-4b74-8bf2-d272cc1a74dc" name="Changes" comment="&#10;archivos text">
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/db/citas.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/db/citas.txt" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/db/medicos.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/db/medicos.txt" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/db/pacientes.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/db/pacientes.txt" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/medicos.txt" beforeDir="false" afterPath="$PROJECT_DIR$/medicos.txt" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+@@ -65,6 +69,11 @@
+     "onboarding.tips.debug.path": "C:/Users/IAN/IdeaProjects/EvidenciaFinalCons/src/Main.java"
+   }
+ }]]></component>
++  <component name="RecentsManager">
++    <key name="MoveFile.RECENT_KEYS">
++      <recent name="C:\Users\IAN\IdeaProjects\EvidenciaFinalCons\src" />
++    </key>
++  </component>
+   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+   <component name="TaskManager">
+     <task active="true" id="Default" summary="Default task">
+@@ -82,7 +91,23 @@
+       <option name="project" value="LOCAL" />
+       <updated>1717576302009</updated>
+     </task>
+-    <option name="localTasksCounter" value="2" />
++    <task id="LOCAL-00002" summary="&#10;archivos text">
++      <option name="closed" value="true" />
++      <created>1717649059155</created>
++      <option name="number" value="00002" />
++      <option name="presentableId" value="LOCAL-00002" />
++      <option name="project" value="LOCAL" />
++      <updated>1717649059155</updated>
++    </task>
++    <task id="LOCAL-00003" summary="&#10;archivos text">
++      <option name="closed" value="true" />
++      <created>1717649070511</created>
++      <option name="number" value="00003" />
++      <option name="presentableId" value="LOCAL-00003" />
++      <option name="project" value="LOCAL" />
++      <updated>1717649070511</updated>
++    </task>
++    <option name="localTasksCounter" value="4" />
+     <servers />
+   </component>
+   <component name="Vcs.Log.Tabs.Properties">
+@@ -110,6 +135,7 @@
+   </component>
+   <component name="VcsManagerConfiguration">
+     <MESSAGE value="se hace el esqueleto del programa" />
+-    <option name="LAST_COMMIT_MESSAGE" value="se hace el esqueleto del programa" />
++    <MESSAGE value="&#10;archivos text" />
++    <option name="LAST_COMMIT_MESSAGE" value="&#10;archivos text" />
+   </component>
+ </project>
+\ No newline at end of file
+Index: medicos.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>1,Doctor Johnson,alergologia\r\n
+===================================================================
+diff --git a/medicos.txt b/medicos.txt
+--- a/medicos.txt	
++++ b/medicos.txt	
+@@ -1,1 +1,2 @@
+-1,Doctor Johnson,alergologia
++1,doctor,abc
++1,Doctor,Alergologo
