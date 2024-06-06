@@ -136,6 +136,7 @@ public class Main {
     }
 
     public static void showCitas() throws IOException {
+        /*se hace branch para mostrar citas*/
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         System.out.println("Introduce el Folio de tu cita: ");
