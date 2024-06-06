@@ -95,7 +95,7 @@ public class Main {
     }
 
     public static void createPaciente() throws IOException {
-
+/*se hace branch para crear pacientes*/
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Introduce el id del Paciente: ");
         String id = reader.readLine();
